@@ -1,10 +1,10 @@
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework import status
 from rest_framework.decorators import api_view, APIView
 from rest_framework.response import Response
-from .models import Book
-from .serializers import BookSerializer
+from .models import Book, Category
+from .serializers import BookSerializer, CategorySerializer
 
 from django.db.models import Q
 
@@ -73,9 +73,15 @@ class BookList(APIView):
         else:
             books = Book.objects.all()
             message = "No se proporcionaron parámetros de búsqueda."
-            serializer = BookSerializer(books, many=True)
+            # serializer = BookSerializer(books, many=True)
+            # ajustes en el serializador para configurar links de acceso a relaciones serializadas
+            #######################################
+            serializer_item = BookSerializer(
+                books, many=True, context={"request": request}
+            )
+            #######################################
             return Response(
-                {"message": message, "data": serializer.data},
+                {"message": message, "data": serializer_item.data},
                 status=status.HTTP_200_OK,
             )
 
@@ -129,3 +135,11 @@ class BookDetail(APIView):
             {"message": f"El libro con el nombre {name} fue eliminado correctamente."},
             status=status.HTTP_200_OK,
         )
+
+
+# ejemplo de vista de muestra de datos de relaciones por medio de hipervinculos
+@api_view()
+def caregory_detail(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    serialized_category = CategorySerializer(category)
+    return Response(serialized_category.data, status=status.HTTP_200_OK)

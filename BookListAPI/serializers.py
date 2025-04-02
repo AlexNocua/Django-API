@@ -23,11 +23,19 @@ class BookSerializer(serializers.ModelSerializer):
     stock = serializers.IntegerField(source="value")
     value_after_tax = serializers.SerializerMethodField(method_name="calculate_tax")
     # category = serializers.StringRelatedField()
-    category = CategorySerializer()
+    # category = CategorySerializer()
+
+    """
+    Creacion de vinculo para visualizar el contenido de una relacion desde un hipervinculo
+    """
+    category = serializers.HyperlinkedRelatedField(
+        queryset=Category.objects.all(), view_name="category-detail"
+    )
 
     class Meta:
         model = Book
         fields = ["stock", "value_after_tax", "category"]
+        # depth = 1 # muestra el serializador de la categoria con con el mismo modo de asignar el serializador de la categoria dentro del la variable categoria.
 
     def calculate_tax(self, product: Book):
         return int(product.value) * Decimal(1.1)
