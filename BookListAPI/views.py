@@ -64,7 +64,7 @@ class BookList(APIView):
 
             else:
                 message = f"No fue  encontrado ningun libro relacionado con el autor {author}."
-                books = Book.objects.all()
+                books = Book.objects.select_related("category").all()
             serializer = BookSerializer(books, many=True)
             return Response(
                 {"message": f"{message}", "data": serializer.data},
