@@ -24,13 +24,14 @@ class BookSerializer(serializers.ModelSerializer):
     value_after_tax = serializers.SerializerMethodField(method_name="calculate_tax")
     # category = serializers.StringRelatedField()
     # category = CategorySerializer()
-
+    # category = CategorySerializer(read_only = True)
+    # category_id = serializers.IntergerField(write_only = True)
     """
     Creacion de vinculo para visualizar el contenido de una relacion desde un hipervinculo
     """
-    category = serializers.HyperlinkedRelatedField(
-        queryset=Category.objects.all(), view_name="category-detail"
-    )
+    # category = serializers.HyperlinkedRelatedField(
+    #     queryset=Category.objects.all(), view_name="category-detail"
+    # )
 
     class Meta:
         model = Book
