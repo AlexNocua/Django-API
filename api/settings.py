@@ -130,11 +130,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 INTERNAL_IPS = ["127.0.0.1"]
 
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',  # JSON
-        'rest_framework_xml.renderers.XMLRenderer',  # XML
-        'rest_framework_yaml.renderers.YAMLRenderer',  # YAML
-        'rest_framework_csv.renderers.CSVRenderer',  # CSV
-    )
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_RENDERER_CLASSES': (
+#         'rest_framework.renderers.JSONRenderer',  # JSON
+#         'rest_framework_xml.renderers.XMLRenderer',  # XML
+#         'rest_framework_yaml.renderers.YAMLRenderer',  # YAML
+#         'rest_framework_csv.renderers.CSVRenderer',  # CSV
+#     )
+# }

@@ -55,21 +55,43 @@ importante recordar como se definen este tipo de vistas en las urls
 
 class BookList(APIView):
     def get(self, request):
-        author = request.GET.get("author")
+        """ "
+        Modo de busqueda sin DRF
+        """
+        # author = request.GET.get("author")
+        # if author:
+        #     books = Book.objects.filter(Q(author__icontains=author))
+        #     if books:
+        #         message = f"Operacion Exitosa."
 
+        #     else:
+        #         message = f"No fue  encontrado ningun libro relacionado con el autor {author}."
+        #         books = Book.objects.select_related("category").all()
+        #     serializer = BookSerializer(books, many=True)
+        #     return Response(
+        #         {"message": f"{message}", "data": serializer.data},
+        #         status=status.HTTP_200_OK,
+        #     )
+
+        """
+        Busqueda con DRF
+        """
+        books = Book.objects.select_related("category").all()
+        author = request.query_params.get("author")
         if author:
-            books = Book.objects.filter(Q(author__icontains=author))
-            if books:
-                message = f"Operacion Exitosa."
 
+            books = books.filter(author__icontains=author)
+            if books:
+                message = f"El autor {author} fue encontrado. "
             else:
-                message = f"No fue  encontrado ningun libro relacionado con el autor {author}."
-                books = Book.objects.select_related("category").all()
+                message = f"El autor {author} no fue encontrado. "
+
             serializer = BookSerializer(books, many=True)
             return Response(
                 {"message": f"{message}", "data": serializer.data},
                 status=status.HTTP_200_OK,
             )
+
         else:
             books = Book.objects.all()
             message = "No se proporcionaron parámetros de búsqueda."

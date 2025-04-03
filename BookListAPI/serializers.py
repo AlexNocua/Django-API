@@ -35,7 +35,7 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = ["stock", "value_after_tax", "category"]
+        fields = ["stock", "value_after_tax", "category", "author"]
         # depth = 1 # muestra el serializador de la categoria con con el mismo modo de asignar el serializador de la categoria dentro del la variable categoria.
 
     def calculate_tax(self, product: Book):
